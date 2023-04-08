@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestSuite" thread-count="4" parallel="tests">
+    <test name="pokemonAbilityTest">
+        <classes>
+            <class name="ApiTests">
+                <methods>
+                    <include name="pokemonAbilityTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="pokemonWeightTest">
+        <classes>
+            <class name="ApiTests">
+                <methods>
+                    <include name="pokemonWeightTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="limitSizeTest">
+        <classes>
+            <class name="ApiTests">
+                <methods>
+                    <include name="limitSizeTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="limitNameTest">
+        <classes>
+            <class name="ApiTests">
+                <methods>
+                    <include name="limitNameTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
