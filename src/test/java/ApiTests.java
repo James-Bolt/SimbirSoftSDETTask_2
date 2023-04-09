@@ -1,13 +1,15 @@
 import io.qameta.allure.Description;
-import models.AbilitiesResponse;
+import models.PokemonInfoResponse;
+import models.PokemonInfoResponse.Ability.AbilityDetails;
 import models.LimitResponse;
-import models.WeightResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static utils.TestObjectBuilder.getAbilityDetailsObject;
+import static utils.TestObjectHelper.getAbilityDetailsList;
 
 public class ApiTests extends BaseTest {
 
@@ -15,20 +17,16 @@ public class ApiTests extends BaseTest {
     @Description("Проверка наличия способности 'run-away' у покемона rattata и её отсутствие у pidgeotto")
     public void pokemonAbilityTest() {
 
-        AbilitiesResponse.Ability runAwayAbility = new AbilitiesResponse.Ability("run-away", "https://pokeapi.co/api/v2/ability/50/");
+        AbilityDetails runAwayAbility = getAbilityDetailsObject("run-away", "https://pokeapi.co/api/v2/ability/50/");
 
-        List<AbilitiesResponse> abilityListRattata = getAbilitiesResponseList("rattata");
-        List<AbilitiesResponse.Ability> abilitiesListRattata = abilityListRattata.stream()
-                .map(AbilitiesResponse::getAbility)
-                .collect(Collectors.toList());
-        List<AbilitiesResponse> abilityListPidgeotto = getAbilitiesResponseList("pidgeotto");
-        List<AbilitiesResponse.Ability> abilitiesListPidgeotto = abilityListPidgeotto.stream()
-                .map(AbilitiesResponse::getAbility)
-                .collect(Collectors.toList());
+        PokemonInfoResponse rattataInfoResponse = getAbilitiesResponseList("rattata");
+        List<AbilityDetails> rattataAbilityDetailsList = getAbilityDetailsList(rattataInfoResponse);
+        PokemonInfoResponse pidgeottoInfoResponse = getAbilitiesResponseList("pidgeotto");
+        List<AbilityDetails> pidgeottoAbilityDetailsList = getAbilityDetailsList(pidgeottoInfoResponse);
 
         SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(abilitiesListRattata.contains(runAwayAbility), "Pokemon don't have that ability");
-        softAssert.assertFalse(abilitiesListPidgeotto.contains(runAwayAbility), "Pokemon has this ability");
+        softAssert.assertTrue(rattataAbilityDetailsList.contains(runAwayAbility), "Pokemon don't have that ability");
+        softAssert.assertFalse(pidgeottoAbilityDetailsList.contains(runAwayAbility), "Pokemon has this ability");
         softAssert.assertAll();
     }
 
@@ -36,10 +34,10 @@ public class ApiTests extends BaseTest {
     @Description("Сравнение веса покемонов")
     public void pokemonWeightTest() {
 
-        WeightResponse weightRattata = getWeightResponse("rattata");
-        WeightResponse weightPidgeotto = getWeightResponse("pidgeotto");
+        PokemonInfoResponse rattataInfoResponse = getAbilitiesResponseList("rattata");
+        PokemonInfoResponse pidgeottoInfoResponse = getAbilitiesResponseList("pidgeotto");
 
-        Assert.assertTrue(weightRattata.getWeight() < weightPidgeotto.getWeight(),
+        Assert.assertTrue(rattataInfoResponse.getWeight() < pidgeottoInfoResponse.getWeight(),
                 "The rattata weighs more than the pidgeotto.");
     }
 

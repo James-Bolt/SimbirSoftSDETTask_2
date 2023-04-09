@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LimitResponse {
 
-    @JsonProperty("count")
     private int count;
 
-    @JsonProperty("name")
     private String name;
 }

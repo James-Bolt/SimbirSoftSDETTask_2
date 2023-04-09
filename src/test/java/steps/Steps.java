@@ -3,9 +3,8 @@ package steps;
 import config.ApiConfig;
 import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
-import models.AbilitiesResponse;
+import models.PokemonInfoResponse;
 import models.LimitResponse;
-import models.WeightResponse;
 
 import java.util.List;
 
@@ -15,36 +14,25 @@ public class Steps extends ApiConfig {
 
     @Step("Получение abilities покемона {PokemonName}")
     @Attachment
-    public static List<AbilitiesResponse> getAbilitiesResponseList(String PokemonName) {
+    public static PokemonInfoResponse getAbilitiesResponseList(String pokemonName) {
         return given(requestSpecification)
                 .when()
-                .get("pokemon/" + PokemonName)
+                .pathParam("pokemonName", pokemonName)
+                .get(POKEMON_PATH)
                 .then()
                 .assertThat()
                 .statusCode(200)
                 .extract()
-                .jsonPath().getList("abilities", AbilitiesResponse.class);
+                .as(PokemonInfoResponse.class);
     }
 
-    @Step("Получение веса покемона {PokemonName}")
+    @Step("Получение списка из {limit} покемонов")
     @Attachment
-    public static WeightResponse getWeightResponse(String PokemonName) {
+    public static List<LimitResponse> getLimitResponseList(int limit) {
         return given(requestSpecification)
                 .when()
-                .get("pokemon/" + PokemonName)
-                .then()
-                .assertThat()
-                .statusCode(200)
-                .extract()
-                .as(WeightResponse.class);
-    }
-
-    @Step("Получение списка из {count} покемонов")
-    @Attachment
-    public static List<LimitResponse> getLimitResponseList(int count) {
-        return given(requestSpecification)
-                .when()
-                .get("pokemon?limit=" + count)
+                .param("limit", limit)
+                .get(BASE_PATH)
                 .then()
                 .assertThat()
                 .statusCode(200)
